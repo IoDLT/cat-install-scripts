@@ -1,6 +1,6 @@
 # Catapult Install Scripts
 
-This set of bash scripts (base script originally from Jaguar0625) that aid in downloading, compiling,and installing  the Catapult toolchain on macOS & Linux systems.  I also added scripts for updating `gcc` and `cmake`.
+This set of bash scripts (base script originally from Jaguar0625) that aid in downloading, compiling,and installing  the Catapult toolchain on macOS & Debian-based Linux systems.  I also added scripts for updating `gcc` and `cmake`, but keep in mind it is only for Debian (for now).
 
 The following scripts are included: 
 
