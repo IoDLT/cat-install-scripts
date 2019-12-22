@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$#" -ne 2 ]; then
+if [ "$#" -ne 3 ]; then
     echo "dependencies directory and core count is required"
     exit 1
 fi
@@ -18,6 +18,7 @@ fi
 
 compiler=
 lib_suffix=
+build_type=
 
 if [[ $OSTYPE == "linux"* ]]; then
     compiler="gcc"
@@ -29,6 +30,10 @@ else
     echo "OS not supported."
     echo
     exit 1
+fi
+
+if [[ $3 == "keccak" ]]; then
+    build_type="-DUSE_KECCAK=true"
 fi
 
 deps_dir=$1
@@ -190,6 +195,7 @@ function install_catapult {
     cmake_options+=(-DBSONC_LIB=${mongo_output_dir}/lib/libbsonc-1.0.${lib_suffix})
 
     ## OTHER ##
+    cmake_options+=(${build_type})
     cmake_options+=(-DCMAKE_BUILD_TYPE=Release)
     cmake_options+=(-G)
     cmake_options+=(Ninja)
