@@ -23,7 +23,7 @@ function install_base_deps {
     base_deps=(autoconf libtool cmake curl git xz-utils
         libatomic-ops-dev libunwind-dev g++ gdb libgflags-dev
         libsnappy-dev ninja-build python3 python3-ply build-essential
-        python-dev libxml2-dev libxslt-dev)
+        python-dev libxml2-dev libxslt-dev libssl-dev)
     install_apt_dependency
 }
 

@@ -18,7 +18,6 @@ fi
 
 compiler=
 lib_suffix=
-build_type=
 
 if [[ $OSTYPE == "linux"* ]]; then
     compiler="gcc"
@@ -30,10 +29,6 @@ else
     echo "OS not supported."
     echo
     exit 1
-fi
-
-if [[ $3 == "keccak" ]]; then
-    build_type="-DUSE_KECCAK=true"
 fi
 
 deps_dir=$1
@@ -113,7 +108,7 @@ function install_google_benchmark {
     # cmake_options+=(-DCMAKE_CXX_FLAGS='-std=c++11 -stdlib=libc++')
     cmake_options+=(-DBENCHMARK_ENABLE_GTEST_TESTS=OFF)
     cmake_options+=(-DCMAKE_BUILD_TYPE=Release)
-    install_git_dependency google benchmark v1.4.1
+    install_git_dependency google benchmark v1.5.0
 }
 
 # endregion
@@ -122,7 +117,7 @@ function install_google_benchmark {
 
 function install_mongo_c_driver {
     cmake_options=(-DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF)
-    install_git_dependency mongodb mongo-c-driver 1.13.0
+    install_git_dependency mongodb mongo-c-driver 1.15.1
 }
 
 function install_mongo_cxx_driver {
@@ -133,7 +128,7 @@ function install_mongo_cxx_driver {
     cmake_options+=(-DBSONCXX_POLY_USE_BOOST=1)
     cmake_options+=(-DCMAKE_BUILD_TYPE=Release)
     
-    install_git_dependency mongodb mongo-cxx-driver r3.4.0
+    install_git_dependency nemtech mongo-cxx-driver r3.4.0-nem
 }
 
 # endregion
@@ -162,7 +157,7 @@ function install_rocksdb {
     # using https://github.com/nemtech/rocksdb.git as work-around for now
     git clone https://github.com/nemtech/rocksdb.git
     cd rocksdb
-    git checkout v6.2.4-nem
+    git checkout v6.6.4-nem
     INSTALL_PATH=${rocksdb_output_dir} CFLAGS="-Wno-error" make install-shared
 }
 
@@ -172,35 +167,34 @@ function install_rocksdb {
 
 function install_catapult {
     cmake_options=()
-
+    
     ## BOOST ##
     cmake_options+=(-DBOOST_ROOT=${boost_output_dir})
     cmake_options+=(-DCMAKE_PREFIX_PATH="${mongo_output_dir}/lib/cmake/libmongocxx-3.4.0;${deps_dir}/mongodb/lib/cmake/libmongoc-1.0;${deps_dir}/mongodb/lib/cmake/libbson-1.0;${deps_dir}/mongodb/lib/cmake/libbsoncxx-3.4.0")
-
+    
     ## ROCKSDB ##
-	cmake_options+=(-DROCKSDB_LIBRARIES=${rocksdb_output_dir}/lib/librocksdb.${lib_suffix})
+    cmake_options+=(-DROCKSDB_LIBRARIES=${rocksdb_output_dir}/lib/librocksdb.${lib_suffix})
     cmake_options+=(-DROCKSDB_INCLUDE_DIR=${rocksdb_output_dir}/include)
     
     ## GTEST & BENCHMARK ##
     cmake_options+=(-Dbenchmark_DIR=${deps_dir}/google/lib/cmake/benchmark)
     cmake_options+=(-DGTEST_ROOT=${deps_dir}/google)
- 
+    
     ## ZMQ ##
     cmake_options+=(-Dcppzmq_DIR=${zmq_output_dir}/share/cmake/cppzmq)
     cmake_options+=(-DZeroMQ_DIR=${zmq_output_dir}/share/cmake/ZeroMQ)
-   
+    
     ## MONGO ##
     cmake_options+=(-DLIBMONGOCXX_LIBRARY_DIRS=${mongo_output_dir})
     cmake_options+=(-DMONGOC_LIB=${mongo_output_dir}/lib/libmongoc-1.0.${lib_suffix})
     cmake_options+=(-DBSONC_LIB=${mongo_output_dir}/lib/libbsonc-1.0.${lib_suffix})
-
+    
     ## OTHER ##
-    cmake_options+=(${build_type})
     cmake_options+=(-DCMAKE_BUILD_TYPE=Release)
     cmake_options+=(-G)
     cmake_options+=(Ninja)
-        
-    git clone https://github.com/nemtech/catapult-server.git
+    
+    git clone https://github.com/nemtech/catapult-server.git --single-branch --branch v0.9.4.1
     cd catapult-server
     
     mkdir _build
