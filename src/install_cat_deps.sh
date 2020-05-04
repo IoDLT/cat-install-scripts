@@ -123,8 +123,8 @@ function install_mongo_c_driver {
 function install_mongo_cxx_driver {
     cmake_options=()
     cmake_options+=(-DBOOST_ROOT=${boost_output_dir})
-    cmake_options+=(-DLIBBSON_DIR=${mongo_output_dir})
-    cmake_options+=(-DLIBMONGOC_DIR=${mongo_output_dir})
+    cmake_options+=(-DLIBBSON-1.0_DIR=${mongo_output_dir})
+    cmake_options+=(-DLIBMONGOC-1.0_DIR=${mongo_output_dir})
     cmake_options+=(-DBSONCXX_POLY_USE_BOOST=1)
     cmake_options+=(-DCMAKE_BUILD_TYPE=Release)
     
