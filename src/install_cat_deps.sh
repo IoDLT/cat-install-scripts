@@ -125,7 +125,7 @@ function install_mongo_c_driver {
 
 function install_mongo_cxx_driver {
     # hotfix
-    export CMAKE_PREFIX_PATH=${mongo_output_dir}/lib/libbson-1.0/:${mongo_output_dir}/lib/libmongoc-1.0/
+    export CMAKE_PREFIX_PATH=${mongo_output_dir}/lib/cmake/libbson-1.0/:${mongo_output_dir}/lib/cmake/libmongoc-1.0/
     cmake_options=()
     cmake_options+=(-DCMAKE_CXX_STANDARD=17)
     cmake_options+=(-DBOOST_ROOT=${boost_output_dir})
