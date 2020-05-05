@@ -31,7 +31,9 @@ The following scripts are included:
 5. Run the pre-install script for base dependencies (might take some time):
    `bash install_base_deps_ubuntu.sh`
 
-6. Run the script:
+6. Export OpenSSL lib path: `export LD_LIBRARY_PATH=/opt/openssl/lib`
+
+7. Run the script:
    `bash install_cat_deps.sh /home/<Your-Username>/catapult-source 8`
 
 ## macOS Instructions
