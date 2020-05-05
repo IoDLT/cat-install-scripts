@@ -33,11 +33,13 @@ fi
 
 deps_dir=$1
 job_count=$2
+CATAPULT_VERSION=v0.9.4.1
 boost_output_dir=${deps_dir}/boost
 gtest_output_dir=${deps_dir}/gtest
 mongo_output_dir=${deps_dir}/mongodb
 zmq_output_dir=${deps_dir}/zeromq
 rocksdb_output_dir=${deps_dir}/rocksdb
+mongo_cxx_output_dir=${deps_dir}/nemtech
 
 echo "Detected system ${OSTYPE}, using ${compiler} compiler and library suffix ${lib_suffix}."
 echo
@@ -46,6 +48,7 @@ echo "gtest_output_dir: ${gtest_output_dir}"
 echo "mongo_output_dir: ${mongo_output_dir}"
 echo "zmq_output_dir: ${zmq_output_dir}"
 echo "rocksdb_output_dir: ${rocksdb_output_dir}"
+echo "mongo_cxx_output_dir: ${mongo_cxx_output_dir}"
 echo
 
 # region boost
@@ -121,7 +124,10 @@ function install_mongo_c_driver {
 }
 
 function install_mongo_cxx_driver {
+    # hotfix
+    export CMAKE_PREFIX_PATH=${mongo_output_dir}/lib/libbson-1.0/:${mongo_output_dir}/lib/libmongoc-1.0/
     cmake_options=()
+    cmake_options+=(-DCMAKE_CXX_STANDARD=17)
     cmake_options+=(-DBOOST_ROOT=${boost_output_dir})
     cmake_options+=(-DLIBBSON-1.0_DIR=${mongo_output_dir})
     cmake_options+=(-DLIBMONGOC-1.0_DIR=${mongo_output_dir})
@@ -170,7 +176,7 @@ function install_catapult {
     
     ## BOOST ##
     cmake_options+=(-DBOOST_ROOT=${boost_output_dir})
-    cmake_options+=(-DCMAKE_PREFIX_PATH="${mongo_output_dir}/lib/cmake/libmongocxx-3.4.0;${deps_dir}/mongodb/lib/cmake/libmongoc-1.0;${deps_dir}/mongodb/lib/cmake/libbson-1.0;${deps_dir}/mongodb/lib/cmake/libbsoncxx-3.4.0")
+    cmake_options+=(-DCMAKE_PREFIX_PATH="${mongo_cxx_output_dir}/lib/cmake/libmongocxx-3.4.0;${mongo_output_dir}/lib/cmake/libmongoc-1.0;${mongo_output_dir}/lib/cmake/libbson-1.0;${mongo_cxx_output_dir}/lib/cmake/libbsoncxx-3.4.0")
     
     ## ROCKSDB ##
     cmake_options+=(-DROCKSDB_LIBRARIES=${rocksdb_output_dir}/lib/librocksdb.${lib_suffix})
@@ -194,7 +200,7 @@ function install_catapult {
     cmake_options+=(-G)
     cmake_options+=(Ninja)
     
-    git clone https://github.com/nemtech/catapult-server.git --single-branch --branch v0.9.4.1
+    git clone https://github.com/nemtech/catapult-server.git --single-branch --branch ${CATAPULT_VERSION}
     cd catapult-server
     
     mkdir _build
