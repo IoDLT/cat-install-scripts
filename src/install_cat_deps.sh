@@ -127,11 +127,8 @@ function install_mongo_cxx_driver {
     # hotfix
     export CMAKE_PREFIX_PATH=${mongo_output_dir}/lib/cmake/libbson-1.0/:${mongo_output_dir}/lib/cmake/libmongoc-1.0/
     cmake_options=()
-    cmake_options+=(-DCMAKE_CXX_STANDARD=17)
-    cmake_options+=(-DBOOST_ROOT=${boost_output_dir})
     cmake_options+=(-DLIBBSON-1.0_DIR=${mongo_output_dir})
     cmake_options+=(-DLIBMONGOC-1.0_DIR=${mongo_output_dir})
-    cmake_options+=(-DBSONCXX_POLY_USE_BOOST=1)
     cmake_options+=(-DCMAKE_BUILD_TYPE=Release)
     
     install_git_dependency nemtech mongo-cxx-driver r3.4.0-nem
