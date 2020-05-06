@@ -179,7 +179,7 @@ function install_catapult {
     
     ## BOOST ##
     cmake_options+=(-DBOOST_ROOT=${boost_output_dir})
-    cmake_options+=(-DCMAKE_PREFIX_PATH="${mongo_output_dir}/lib/cmake/libmongoc-1.0;${mongo_output_dir}/lib/cmake/libbson-1.0")
+    cmake_options+=(-DCMAKE_PREFIX_PATH="${mongo_output_dir}/lib/cmake/libmongoc-1.0;${mongo_output_dir}/lib/cmake/libmongocxx-3.4.0;${mongo_output_dir}/lib/cmake/libbsoncxx-3.4.0;${mongo_output_dir}/lib/cmake/libbson-1.0")
     
     ## ROCKSDB ##
     cmake_options+=(-DROCKSDB_LIBRARIES=${rocksdb_output_dir}/lib/librocksdb.${lib_suffix})
