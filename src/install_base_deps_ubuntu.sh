@@ -78,7 +78,7 @@ function install_openssl {
     echo
     mkdir /opt/openssl
     tar xfvz ~/Downloads/openssl-${openssl_version}.tar.gz --directory /opt/openssl
-    cd /opt/openssl/openssl-1.1.1b
+    cd /opt/openssl/openssl-${openssl_version}
     ./config --prefix=/opt/openssl --openssldir=/opt/openssl/ssl
     make
     make install

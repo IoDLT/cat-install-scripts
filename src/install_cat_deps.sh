@@ -18,13 +18,18 @@ fi
 
 compiler=
 lib_suffix=
+openssl_dir=
 
 if [[ $OSTYPE == "linux"* ]]; then
     compiler="gcc"
     lib_suffix="so"
+    # use manual install
+    openssl_dir="/opt/openssl/openssl-1.1.1f"
     elif [[ $OSTYPE == "darwin"* ]]; then
     compiler="clang"
     lib_suffix="dylib"
+    # target Brew install
+    openssl_dir="/usr/local/opt/openssl@1.1"
 else
     echo "OS not supported."
     echo
@@ -39,7 +44,6 @@ gtest_output_dir=${deps_dir}/gtest
 mongo_output_dir=${deps_dir}/mongodb
 zmq_output_dir=${deps_dir}/zeromq
 rocksdb_output_dir=${deps_dir}/rocksdb
-mongo_cxx_output_dir=${deps_dir}/nemtech
 
 echo "Detected system ${OSTYPE}, using ${compiler} compiler and library suffix ${lib_suffix}."
 echo
@@ -48,7 +52,6 @@ echo "gtest_output_dir: ${gtest_output_dir}"
 echo "mongo_output_dir: ${mongo_output_dir}"
 echo "zmq_output_dir: ${zmq_output_dir}"
 echo "rocksdb_output_dir: ${rocksdb_output_dir}"
-echo "mongo_cxx_output_dir: ${mongo_cxx_output_dir}"
 echo
 
 # region boost
@@ -68,6 +71,7 @@ function install_boost {
     
     b2_options=()
     b2_options+=(toolset=${compiler})
+    b2_options+=(--without-python)
     # b2_options+=(cxxflags='-std=c++1y -stdlib=libc++')
     # b2_options+=(linkflags='-stdlib=libc++')
     b2_options+=(--prefix=${boost_output_dir})
@@ -127,11 +131,13 @@ function install_mongo_cxx_driver {
     # hotfix
     export CMAKE_PREFIX_PATH=${mongo_output_dir}/lib/cmake/libbson-1.0/:${mongo_output_dir}/lib/cmake/libmongoc-1.0/
     cmake_options=()
-    cmake_options+=(-DLIBBSON-1.0_DIR=${mongo_output_dir})
-    cmake_options+=(-DLIBMONGOC-1.0_DIR=${mongo_output_dir})
+    cmake_options+=(-DBOOST_ROOT=${boost_output_dir})
+    cmake_options+=(-DLIBBSON_DIR=${mongo_output_dir})
+    cmake_options+=(-DLIBMONGOC_DIR=${mongo_output_dir})
+    cmake_options+=(-DBSONCXX_POLY_USE_BOOST=1)
     cmake_options+=(-DCMAKE_BUILD_TYPE=Release)
     
-    install_git_dependency nemtech mongo-cxx-driver r3.4.0-nem
+    install_git_dependency mongodb mongo-cxx-driver r3.4.0
 }
 
 # endregion
@@ -173,7 +179,7 @@ function install_catapult {
     
     ## BOOST ##
     cmake_options+=(-DBOOST_ROOT=${boost_output_dir})
-    cmake_options+=(-DCMAKE_PREFIX_PATH="${mongo_cxx_output_dir}/lib/cmake/libmongocxx-3.4.0;${mongo_output_dir}/lib/cmake/libmongoc-1.0;${mongo_output_dir}/lib/cmake/libbson-1.0;${mongo_cxx_output_dir}/lib/cmake/libbsoncxx-3.4.0")
+    cmake_options+=(-DCMAKE_PREFIX_PATH="${mongo_output_dir}/lib/cmake/libmongoc-1.0;${mongo_output_dir}/lib/cmake/libbson-1.0")
     
     ## ROCKSDB ##
     cmake_options+=(-DROCKSDB_LIBRARIES=${rocksdb_output_dir}/lib/librocksdb.${lib_suffix})
@@ -191,6 +197,10 @@ function install_catapult {
     cmake_options+=(-DLIBMONGOCXX_LIBRARY_DIRS=${mongo_output_dir})
     cmake_options+=(-DMONGOC_LIB=${mongo_output_dir}/lib/libmongoc-1.0.${lib_suffix})
     cmake_options+=(-DBSONC_LIB=${mongo_output_dir}/lib/libbsonc-1.0.${lib_suffix})
+    
+    
+    ## OPENSSL ##
+    cmake_options+=(-DOPENSSL_ROOT_DIR=${openssl_dir})
     
     ## OTHER ##
     cmake_options+=(-DCMAKE_BUILD_TYPE=Release)
