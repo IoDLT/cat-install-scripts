@@ -41,7 +41,7 @@ function install_icu4c {
 }
 
 function install_base_deps {
-    base_deps=(bash openssl@1.1)
+    base_deps=(bash openssl@1.1 cmake ninja)
     install_brew_dependency
 }
 
