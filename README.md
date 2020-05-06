@@ -4,14 +4,21 @@ This set of bash scripts (base script originally from Jaguar0625) that aid in do
 
 The following scripts are included:
 
-- `install_base_deps_ubuntu.sh` - only for Linux.
+- `install_base_deps_ubuntu.sh` - for Ubuntu.
 
   Installs `apt` system dependencies that are required for Catapult. It also updates via `apt update` and `apt upgrade`.
 
   **Usage**:
   `bash install_base_deps_ubuntu.sh`
 
-* `install_cat_deps.sh` - installs direct Catapult dependencies. Dependencies will be installed in the specified directory.
+- `install_base_deps_macos.sh` - for macOS.
+
+  Installs `brew` system dependencies that are required for Catapult. It also updates via `brew update` and `brew upgrade`. You must have Homebrew installed for this to work.
+
+  **Usage**:
+  `bash install_base_deps_macos.sh`
+
+- `install_cat_deps.sh` - installs direct Catapult dependencies. Dependencies will be installed in the specified directory.
 
   **Usage**:  
    `bash install_cat_deps.sh <install_dir> <job_count, i.e "8">`
@@ -48,5 +55,8 @@ The following scripts are included:
 4. Go into the directory:
    `cd cat-install-scripts/src`
 
-5. Run the script:
+5. Run the base dependency setup:
+   `bash install_base_deps_macos.sh`
+
+6. Run the script:
    `bash install_cat_deps.sh /Users/<Your-Username>/catapult-source 8`
