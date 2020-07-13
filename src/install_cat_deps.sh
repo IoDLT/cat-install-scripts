@@ -38,7 +38,7 @@ fi
 
 deps_dir=$1
 job_count=$2
-CATAPULT_VERSION=v0.9.4.1
+CATAPULT_VERSION=v0.9.6.3
 boost_output_dir=${deps_dir}/boost
 gtest_output_dir=${deps_dir}/gtest
 mongo_output_dir=${deps_dir}/mongodb
