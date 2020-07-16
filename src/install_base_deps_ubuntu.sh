@@ -39,10 +39,10 @@ function install_gcc {
     
     # courtesy of: https://linuxize.com/post/how-to-install-gcc-compiler-on-ubuntu-18-04/
     
-    sudo apt install software-properties-common
-    sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+    apt install software-properties-common -y
+    add-apt-repository ppa:ubuntu-toolchain-r/test -y
     
-    sudo apt install gcc-${gcc_version} g++-${gcc_version}
+    apt install gcc-${gcc_version} g++-${gcc_version} -y
     
     # update alternative - warning, it will this version of gcc as the prioritized version on your system
     
