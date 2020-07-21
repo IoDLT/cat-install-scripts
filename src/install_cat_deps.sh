@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$#" -ne 2 ]; then
+if [ "$#" < 2 ]; then
     echo "dependencies directory and core count is required"
     exit 1
 fi
@@ -19,6 +19,7 @@ fi
 compiler=
 lib_suffix=
 openssl_dir=
+CATAPULT_VERSION=v0.9.6.3
 
 if [[ $OSTYPE == "linux"* ]]; then
     compiler="gcc"
@@ -36,10 +37,14 @@ else
     exit 1
 fi
 
+if [[ $3 != "" ]]; then
+    echo "Attempting to install Catapult version $3"
+    CATAPULT_VERSION=$3
+fi
+
 deps_dir=$1
 job_count=$2
-CATAPULT_VERSION=v0.9.6.3
-boost_output_dir=${deps_dir}/boost
+boost_output_dir=${dseps_dir}/boost
 gtest_output_dir=${deps_dir}/gtest
 mongo_output_dir=${deps_dir}/mongodb
 zmq_output_dir=${deps_dir}/zeromq
