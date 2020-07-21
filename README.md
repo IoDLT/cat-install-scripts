@@ -49,8 +49,8 @@ The following scripts are included:
 
 2. Create a directory for your catapult install to go: `mkdir catapult-source`
 
-3. Clone and checkout the correct branch:
-   git clone `https://github.com/IoDLT/cat-install-scripts.git --single-branch --branch v0.9.4.1`
+3. Clone:
+   `git clone https://github.com/IoDLT/cat-install-scripts.git`
 
 4. Go into the directory:
    `cd cat-install-scripts/src`
@@ -60,3 +60,17 @@ The following scripts are included:
 
 6. Run the script:
    `bash install_cat_deps.sh /Users/<Your-Username>/catapult-source 8`
+
+## Other options
+
+Appending `rebuild` to the end will rebuild / continue the compilation of `catapult-server`:
+
+```sh
+bash install_cat_deps.sh /Users/<Your-Username>/catapult-source 8 rebuild
+```
+
+You can also specify the version of which `catapult-server` instance you wish to compile:
+
+```sh
+bash install_cat_deps.sh /Users/<Your-Username>/catapult-source v0.9.4.1 8
+```
