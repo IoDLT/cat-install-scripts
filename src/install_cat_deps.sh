@@ -44,7 +44,7 @@ fi
 
 deps_dir=$1
 job_count=$2
-boost_output_dir=${dseps_dir}/boost
+boost_output_dir=${deps_dir}/boost
 gtest_output_dir=${deps_dir}/gtest
 mongo_output_dir=${deps_dir}/mongodb
 zmq_output_dir=${deps_dir}/zeromq
@@ -240,9 +240,16 @@ declare -a installers=(
     install_rocksdb
     install_catapult
 )
-for install in "${installers[@]}"
-do
+if [[ $4 == "rebuild" ]]; then
+    echo "Rebuilding Catapult"
     pushd source > /dev/null
-    ${install}
+    install_catapult
     popd > /dev/null
-done
+else
+    for install in "${installers[@]}"
+    do
+        pushd source > /dev/null
+        ${install}
+        popd > /dev/null
+    done
+fi
