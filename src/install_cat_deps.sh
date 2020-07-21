@@ -240,7 +240,7 @@ declare -a installers=(
     install_rocksdb
     install_catapult
 )
-if [[ $4 == "rebuild" ]]; then
+if [[ $4 == "rebuild" || $3 == "rebuild" ]]; then
     echo "Rebuilding Catapult"
     pushd source > /dev/null
     install_catapult
